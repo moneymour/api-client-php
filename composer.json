@@ -1,0 +1,30 @@
+{
+  "name": "moneymour/api-client-php",
+  "version": "1.0.0",
+  "description": "The library offers easy access to Moneymour APIs",
+  "type": "library",
+  "keywords": ["moneymour", "payment", "payments", "payment method", "loans", "loan", "e-commerce"],
+  "homepage": "https://github.com/moneymour/api-client-php",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Antonio Trapani",
+      "email": "antonio@moneymour.com",
+      "homepage": "https://about.me/antonio.trapani",
+      "role": "Head of backend"
+    }
+  ],
+  "require": {
+    "ext-curl": "*",
+    "ext-openssl": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Moneymour\\": "src/"
+    }
+  }
+}
