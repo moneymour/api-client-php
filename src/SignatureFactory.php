@@ -15,7 +15,7 @@ class SignatureFactory {
     private $publicKey;
 
     /**
-     * Signature constructor.
+     * SignatureFactory constructor.
      *
      * @param string $privateKey
      * @param string $publicKey
