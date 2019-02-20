@@ -6,9 +6,11 @@ class ApiClient {
 
     const ENVIRONMENT_PRODUCTION = 'production';
     const ENVIRONMENT_SANDBOX = 'sandbox';
+    const ENVIRONMENT_DEVELOPMENT = 'development';
 
     const API_BASE_URL = 'https://api.moneymour.com';
     const API_SANDBOX_BASE_URL = 'https://api.sandbox.moneymour.com';
+    const API_DEVELOPMENT_BASE_URL = 'http://localhost:3000';
 
     const ENDPOINT_MERCHANT_REQUEST = '/merchant-request';
 
@@ -38,17 +40,25 @@ class ApiClient {
      * @param string $merchantId The merchant identifier
      * @param string $merchantSecret The merchant secret
      * @param SignatureFactory $signatureFactory
-     * @param string $environment The API environment, sandbox or production. Default: sandbox
+     * @param string $environment The API environment: production, sandbox or development. Default: sandbox
      * @throws \Exception In case of a wrong environment name
      */
     public function __construct($merchantId, $merchantSecret, $signatureFactory, $environment = self::ENVIRONMENT_SANDBOX)
     {
-        if (!in_array($environment, [self::ENVIRONMENT_SANDBOX, self::ENVIRONMENT_PRODUCTION])) {
-            throw new \Exception("Invalid environment, please use 'production' or 'sandbox'");
+        $environment = strtolower($environment);
+
+        if (!in_array($environment, [
+            self::ENVIRONMENT_PRODUCTION,
+            self::ENVIRONMENT_SANDBOX,
+            self::ENVIRONMENT_DEVELOPMENT
+        ])) {
+            throw new \Exception("Invalid environment, please use 'production', 'sandbox' or 'development'");
         }
 
         if ($environment === self::ENVIRONMENT_PRODUCTION) {
             $this->baseUrl = self::API_BASE_URL;
+        } elseif ($environment === self::ENVIRONMENT_DEVELOPMENT) {
+            $this->baseUrl = self::API_DEVELOPMENT_BASE_URL;
         }
 
         $this->merchantId = $merchantId;
