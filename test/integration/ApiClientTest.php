@@ -6,54 +6,61 @@ use PHPUnit\Framework\TestCase;
 
 class ApiClientTest extends TestCase {
     private $privateKey = '-----BEGIN RSA PRIVATE KEY-----
-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
+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
 -----END RSA PRIVATE KEY-----';
 
-    private $merchantId = '3497897e-bf6a-44d4-89b8-e6fc06acc46b';
-    private $merchantSecret = 'zmEVRw0rZlIRGUIabCBduCcVo2LklqNmGgZYdEqOhOFRxabxYtyYu3VZH7awOqQR';
+    private $merchantId = '287cefd4-d0e5-45d7-a853-35b9426996ca';
+    private $merchantSecret = 'C9el8k3brQ7S4BUG6faJXmRwVSxWKlBxGmiRBEwZfSE6VHwDRIMgJddqS1iFzxnk';
 
     public function testRequest() {
         $signatureFactory = new SignatureFactory($this->privateKey);
         $client = new ApiClient($this->merchantId, $this->merchantSecret, $signatureFactory);
-        $client->setBaseUrl('http://localhost:3000');
+
+        $jsonResponse = [];
 
         try {
             $jsonResponse = $client->request([
                 'phoneNumber' => '+39' . rand(1000000000, 9999999999),
                 'orderId' => '12345678',
-                'productName' => 'GoPro Hero7',
-                'productDescription' => '',
                 'amount' => 500,
+                'products' => [
+                    [
+                        'name' => 'GoPro Hero7',
+                        'amount' => 500
+                    ]
+                ]
             ]);
-
-            static::assertTrue(isset($jsonResponse['status']));
-            static::assertEquals($jsonResponse['status'], 'accepted');
         } catch (\Exception $e) {
             static::fail($e->getMessage());
         }
+
+        print var_export($jsonResponse, 1);
+
+        static::assertTrue(isset($jsonResponse['status']));
+        static::assertEquals($jsonResponse['status'], 'accepted');
     }
 }

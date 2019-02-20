@@ -4,13 +4,18 @@ namespace Moneymour;
 
 class ApiClient {
 
+    const ENVIRONMENT_PRODUCTION = 'production';
+    const ENVIRONMENT_SANDBOX = 'sandbox';
+
     const API_BASE_URL = 'https://api.moneymour.com';
+    const API_SANDBOX_BASE_URL = 'https://api.sandbox.moneymour.com';
+
     const ENDPOINT_MERCHANT_REQUEST = '/merchant-request';
 
     /**
      * @var string Moneymour APIs' base url
      */
-    protected $baseUrl = self::API_BASE_URL;
+    protected $baseUrl = self::API_SANDBOX_BASE_URL;
 
     /**
      * @var string The merchant identifier
@@ -33,9 +38,19 @@ class ApiClient {
      * @param string $merchantId The merchant identifier
      * @param string $merchantSecret The merchant secret
      * @param SignatureFactory $signatureFactory
+     * @param string $environment The API environment, sandbox or production. Default: sandbox
+     * @throws \Exception In case of a wrong environment name
      */
-    public function __construct($merchantId, $merchantSecret, $signatureFactory)
+    public function __construct($merchantId, $merchantSecret, $signatureFactory, $environment = self::ENVIRONMENT_SANDBOX)
     {
+        if (!in_array($environment, [self::ENVIRONMENT_SANDBOX, self::ENVIRONMENT_PRODUCTION])) {
+            throw new \Exception("Invalid environment, please use 'production' or 'sandbox'");
+        }
+
+        if ($environment === self::ENVIRONMENT_PRODUCTION) {
+            $this->baseUrl = self::API_BASE_URL;
+        }
+
         $this->merchantId = $merchantId;
         $this->merchantSecret = $merchantSecret;
         $this->signatureFactory = $signatureFactory;
@@ -71,16 +86,5 @@ class ApiClient {
         curl_close ($ch);
 
         return json_decode($response, true);
-    }
-
-    /**
-     * Set the base url for Moneymour APIs
-     *
-     * @param string $baseUrl
-     * @return ApiClient
-     */
-    public function setBaseUrl($baseUrl) {
-        $this->baseUrl = $baseUrl;
-        return $this;
     }
 }
