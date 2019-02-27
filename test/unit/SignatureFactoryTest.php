@@ -5,9 +5,6 @@ namespace Moneymour;
 use PHPUnit\Framework\TestCase;
 
 class SignatureFactoryTest extends TestCase {
-    private $secret = 'zmEVRw0rZlIRGUIabCBduCcVo2LklqNmGgZYdEqOhOFRxabxYtyYu3VZH7awOqQR';
-    private $merchantId = '3497897e-bf6a-44d4-89b8-e6fc06acc46b';
-
     public function testBuildAndVerify() {
         $key = openssl_pkey_new([
             "digest_alg" => "sha512",
@@ -20,13 +17,9 @@ class SignatureFactoryTest extends TestCase {
         $publicKey = $publicKey["key"];
 
         $body = [
-            'phoneNumber' => '+39' . rand(1000000000, 9999999999),
+            'merchantId' => '287cefd4-d0e5-45d7-a853-35b9426996ca',
             'orderId' => '12345678',
-            'productName' => 'GoPro Hero7',
-            'productDescription' => '',
-            'amount' => 500,
-            'secret' => $this->secret,
-            'merchantId' => $this->merchantId
+            'loanStatus' => 'active'
         ];
 
         $expiresAt = time() . '';
@@ -34,10 +27,14 @@ class SignatureFactoryTest extends TestCase {
         $factory = new SignatureFactory($privateKey, $publicKey);
         $signature = $factory->build($expiresAt, $body);
 
+        $isValid = false;
+
         try {
-            static::assertTrue($factory->verify($signature, $expiresAt, $body));
+            $isValid = $factory->verify($signature, $expiresAt, $body);
         } catch (\Exception $e) {
             static::fail($e->getMessage());
         }
+
+        static::assertTrue($isValid);
     }
 }

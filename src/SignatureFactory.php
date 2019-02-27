@@ -5,22 +5,22 @@ namespace Moneymour;
 class SignatureFactory {
 
     /**
-     * @var string The RSA private key
+     * @var string The merchant RSA private key
      */
     private $privateKey;
 
     /**
-     * @var string The RSA public key
+     * @var string Moneymour RSA public key
      */
     private $publicKey;
 
     /**
      * SignatureFactory constructor.
      *
-     * @param string $privateKey
-     * @param string $publicKey
+     * @param string $privateKey The merchant RSA private key
+     * @param string $publicKey Moneymour RSA public key
      */
-    public function __construct($privateKey, $publicKey = null) {
+    public function __construct($privateKey, $publicKey) {
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
     }
@@ -33,17 +33,12 @@ class SignatureFactory {
      * @return string The base64 encoded signature string
      */
     public function build($expiresAt, $body) {
-        // Build the json payload
-        $jsonData = json_encode($body);
-
-        // Build the payload for the signature
-        $payload = '';
-        $payload .= $body['secret'] . '|';
-        $payload .= $expiresAt . '|';
-        $payload .= $jsonData;
-
-        // Build the signature
-        openssl_sign($payload, $signature, $this->privateKey, OPENSSL_ALGO_SHA256);
+        openssl_sign(
+            $this->buildSignatureString($expiresAt, $body),
+            $signature,
+            $this->privateKey,
+            OPENSSL_ALGO_SHA256
+        );
 
         return base64_encode($signature);
     }
@@ -58,16 +53,12 @@ class SignatureFactory {
      * @throws \Exception
      */
     public function verify($signature, $expiresAt, $body) {
-        // Build the json payload
-        $jsonData = json_encode($body);
-
-        // Build the payload for the signature
-        $payload = '';
-        $payload .= $body['secret'] . '|';
-        $payload .= $expiresAt . '|';
-        $payload .= $jsonData;
-
-        $verification = openssl_verify($payload, base64_decode($signature), $this->publicKey, OPENSSL_ALGO_SHA256);
+        $verification = openssl_verify(
+            $this->buildSignatureString($expiresAt, $body),
+            base64_decode($signature),
+            $this->publicKey,
+            OPENSSL_ALGO_SHA256
+        );
 
         if ($verification === -1) {
             throw new \Exception("Error during signature verification");
@@ -89,5 +80,16 @@ class SignatureFactory {
         $nowUTC->add(new \DateInterval('PT60S'));
 
         return $nowUTC->format('U');
+    }
+
+    /**
+     * Build the string to be signed
+     *
+     * @param string $expiresAt EPOCH timestamp
+     * @param array $body The body to be sent in the POST request
+     * @return string
+     */
+    private function buildSignatureString($expiresAt, $body) {
+        return $expiresAt . '|' . json_encode($body);
     }
 }

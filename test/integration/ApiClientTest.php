@@ -33,16 +33,26 @@ XxEV1nAnFB3KMGgaKQPtNYWN6GRqI0iYQetDJI1bD/GR082l0kX+a4k1LwqazW5G
 BV1aiWzsnSB2aNFSZKVPUWFmqtyxxb8d75yyp4wRdjjHiezZcuKk
 -----END RSA PRIVATE KEY-----';
 
+    private $publicKey = '-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvT3czEWmcTH6ITffOJFv
+vKdsS6iv1A3+OnhmOeZKbdLD+OWeivWmXr+6VCNT4qcL+aMfii+W8Hon3DCnqeya
+b2MY7rIqtwA+xFafTYFHhQU5nsCCHMWU6LXXX9Jc8xWycK9PGhEkptvIYsgrKzNI
+Xqkp1kM+aX/ZmSqgqjpSODce/FVDPt56NWMowoIsppnRSm11NoDPp5o1el5kZSIo
+RQCTULSFVrl4fdGYKel3JjkfJ1ul2RhpPz012NY5T09hjYB3J0nIRv6LhisubcB4
+AFfTj/u8Ivmmlo0txlGKitrUPNXOYX4+Cpv3myZWwB78LzBwmsz/PTmmqBWalv1M
+OQIDAQAB
+-----END PUBLIC KEY-----';
+
     private $merchantId = '287cefd4-d0e5-45d7-a853-35b9426996ca';
     private $merchantSecret = 'C9el8k3brQ7S4BUG6faJXmRwVSxWKlBxGmiRBEwZfSE6VHwDRIMgJddqS1iFzxnk';
 
     public function testRequest() {
-        $signatureFactory = new SignatureFactory($this->privateKey);
-        $client = new ApiClient($this->merchantId, $this->merchantSecret, $signatureFactory);
-
+        $signatureFactory = new SignatureFactory($this->privateKey, $this->publicKey);
         $jsonResponse = [];
 
         try {
+            $client = new ApiClient($this->merchantId, $this->merchantSecret, $signatureFactory);
+
             $jsonResponse = $client->request([
                 'phoneNumber' => '+39' . rand(1000000000, 9999999999),
                 'orderId' => '12345678',
@@ -57,8 +67,6 @@ BV1aiWzsnSB2aNFSZKVPUWFmqtyxxb8d75yyp4wRdjjHiezZcuKk
         } catch (\Exception $e) {
             static::fail($e->getMessage());
         }
-
-        print var_export($jsonResponse, 1);
 
         static::assertTrue(isset($jsonResponse['status']));
         static::assertEquals($jsonResponse['status'], 'accepted');
