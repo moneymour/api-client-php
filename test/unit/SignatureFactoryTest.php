@@ -17,9 +17,15 @@ class SignatureFactoryTest extends TestCase {
         $publicKey = $publicKey["key"];
 
         $body = [
-            'merchantId' => '287cefd4-d0e5-45d7-a853-35b9426996ca',
+            'phoneNumber' => '+39' . rand(1000000000, 9999999999),
             'orderId' => '12345678',
-            'loanStatus' => 'active'
+            'amount' => 500,
+            'products' => [
+                [
+                    'name' => 'GoPro Hero7 É',
+                    'amount' => 500
+                ]
+            ]
         ];
 
         $expiresAt = time() . '';

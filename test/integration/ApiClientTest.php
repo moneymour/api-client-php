@@ -59,7 +59,7 @@ OQIDAQAB
                 'amount' => 500,
                 'products' => [
                     [
-                        'name' => 'GoPro Hero7',
+                        'name' => 'GoProÉ Hero7',
                         'amount' => 500
                     ]
                 ]

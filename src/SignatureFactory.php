@@ -90,6 +90,6 @@ class SignatureFactory {
      * @return string
      */
     private function buildSignatureString($expiresAt, $body) {
-        return $expiresAt . '|' . json_encode($body);
+        return $expiresAt . '|' . utf8_encode(json_encode($body, JSON_UNESCAPED_UNICODE));
     }
 }
