@@ -20,7 +20,7 @@ class SignatureFactory {
      * @param string $privateKey The merchant RSA private key
      * @param string $publicKey Moneymour RSA public key
      */
-    public function __construct($privateKey, $publicKey) {
+    public function __construct($privateKey, $publicKey = null) {
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
     }
