@@ -95,7 +95,7 @@ class ApiClient {
             'Expires-at: ' . $expiresAt,
             'Signature: ' . $signature
         ]);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, utf8_encode(json_encode($body, JSON_UNESCAPED_UNICODE)));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body, JSON_UNESCAPED_UNICODE));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
         curl_close ($ch);

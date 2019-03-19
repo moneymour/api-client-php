@@ -1,6 +1,6 @@
 {
   "name": "moneymour/api-client-php",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "The library offers easy access to Moneymour APIs",
   "type": "library",
   "keywords": ["moneymour", "payment", "payments", "payment method", "loans", "loan", "e-commerce"],
