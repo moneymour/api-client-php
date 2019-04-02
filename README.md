@@ -107,10 +107,10 @@ Moneymour APIs allow only one pending request at a time. If you get a **403 erro
 ## Verify signature in your webhook
 
 ```php
-$factory = new SignatureFactory($self::PRIVATE_KEY, self::PUBLIC_KEY);
+$factory = new SignatureFactory(self::PRIVATE_KEY, self::PUBLIC_KEY);
 $factory->verify(
-  $signature, // http request "Signature"
-  $expiresAt, // http request "Expires-at"
+  $signature, // http request header "Signature"
+  $expiresAt, // http request header "Expires-at"
   $body // http request body
 ); // return true or false
 ```
