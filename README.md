@@ -24,17 +24,16 @@ class ApiClient {
   // Get the following information from https://merchant.sandbox.moneymour.com
   // For production: https://merchant.moneymour.com
   const PRIVATE_KEY = '<YOUR_PRIVATE_KEY>';
-  const PUBLIC_KEY = '<YOUR_PUBLIC_KEY>';
   const MERCHANT_ID = '<YOUR_MERCHANT_ID>';
   const MERCHANT_SECRET = '<YOUR_MERCHANT_SECRET>';
 
   // Build the client
-  $signatureFactory = new SignatureFactory(self::PRIVATE_KEY, self::PUBLIC_KEY);
+  $signatureFactory = new SignatureFactory(self::PRIVATE_KEY);
   $client = new MoneymourApiClient(
     self::MERCHANT_ID,
     self::MERCHANT_SECRET,
     $signatureFactory,
-    MoneymourApiClient::ENVIRONMENT_SANDBOX // or ENVIRONMENT_PRODUCTION when you get ready
+    MoneymourApiClient::ENVIRONMENT_SANDBOX  // or ENVIRONMENT_PRODUCTION when you get ready
   );
 
   // Request payload
@@ -107,10 +106,11 @@ Moneymour APIs allow only one pending request at a time. If you get a **403 erro
 ## Verify signature in your webhook
 
 ```php
-$factory = new SignatureFactory(self::PRIVATE_KEY, self::PUBLIC_KEY);
+$factory = new SignatureFactory(self::PRIVATE_KEY);
 $factory->verify(
   $signature, // http request header "Signature"
   $expiresAt, // http request header "Expires-at"
-  $body // http request body
+  $body, // http request body
+  MoneymourApiClient::ENVIRONMENT_SANDBOX  // or ENVIRONMENT_PRODUCTION when you get ready
 ); // return true or false
 ```
