@@ -16,6 +16,7 @@ class SignatureFactory {
 
     /**
      * SignatureFactory constructor.
+     * If you don't give any public key, the official public key will be used depending on the environment.
      *
      * @param string $privateKey The merchant RSA private key
      * @param string $publicKey Moneymour RSA public key
@@ -49,10 +50,17 @@ class SignatureFactory {
      * @param string $signature The base64 encoded signature string
      * @param string $expiresAt EPOCH timestamp
      * @param array $body The body to be sent in the POST request
+     * @param string $environment The API environment: production, sandbox, stage or development. Default: sandbox
      * @return boolean True if the signature is verified
      * @throws \Exception
      */
-    public function verify($signature, $expiresAt, $body) {
+    public function verify($signature, $expiresAt, $body, $environment = ApiClient::ENVIRONMENT_SANDBOX) {
+        ApiClient::validateEnvironment($environment);
+
+        if (!$this->publicKey) {
+            $this->publicKey = file_get_contents('./keys/moneymour-' . $environment . '-merchant-callback-public.pem');
+        }
+
         $verification = openssl_verify(
             $this->buildSignatureString($expiresAt, $body),
             base64_decode($signature),

@@ -49,14 +49,7 @@ class ApiClient {
     {
         $environment = strtolower($environment);
 
-        if (!in_array($environment, [
-            self::ENVIRONMENT_PRODUCTION,
-            self::ENVIRONMENT_SANDBOX,
-            self::ENVIRONMENT_STAGE,
-            self::ENVIRONMENT_DEVELOPMENT
-        ])) {
-            throw new \Exception("Invalid environment, please use 'production', 'sandbox', 'stage' or 'development'");
-        }
+        self::validateEnvironment($environment);
 
         if ($environment === self::ENVIRONMENT_PRODUCTION) {
             $this->baseUrl = self::API_BASE_URL;
@@ -101,5 +94,22 @@ class ApiClient {
         curl_close ($ch);
 
         return json_decode($response, true);
+    }
+
+    /**
+     * Validate the given environment name
+     *
+     * @param string $environment The API environment: production, sandbox, stage or development. Default: sandbox
+     * @throws \Exception
+     */
+    public static function validateEnvironment($environment) {
+        if (!in_array($environment, [
+            self::ENVIRONMENT_PRODUCTION,
+            self::ENVIRONMENT_SANDBOX,
+            self::ENVIRONMENT_STAGE,
+            self::ENVIRONMENT_DEVELOPMENT
+        ])) {
+            throw new \Exception("Invalid environment, please use 'production', 'sandbox', 'stage' or 'development'");
+        }
     }
 }
