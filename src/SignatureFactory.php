@@ -4,6 +4,36 @@ namespace Moneymour;
 
 class SignatureFactory {
 
+    const developmentMoneymourPublicKey = '-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0xjRECYz5oKWyjmCOQc3
+x9D9eC8v79iRsMScCu9fHesM0Znkto73tvfUhGDmTms6NIgVDDWzLwf40rRPFkxK
+zuw0ZGRJDSRw7dGNQ/yjM+R3WOE9HAaUjtX6rX6t/urvQW0XN057/clfMeebEQR0
+knJhOuukrgaZC54XbMitlGNk4UxXkbaTD+h0UoSAqxVSM1riUTbNef6mWWHOZGB+
+Dpi6lNI6Y6WX9w4nTwXiOWkthM+jsGTV1Vz49UB8gDmcZSgBp1dRLVzTm7NH8H3v
+rgrjADr43io1gUC1N0zrXxzyX+xNLABkLW+Oi3lbSXSFFxCjdl2vlUs2SSW78EMD
+KwIDAQAB
+-----END PUBLIC KEY-----';
+
+    const stageMoneymourPublicKey = '-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAty+wRd3ArC2RfUA1Ypua
+KkXp/bEs6KgRX68NrenZ3yk3jx7M72EeQS0tgNvWVfVC3NdhX9rJCM2JgkmlDIOk
+keRj+S2BWJ1sIo5a/Haxkgm745Vd1McOz+VciWPY5p9OJB7xQX+sKhrfKzjfWLAs
++e3Kre/l5OzhvzHf7yvzJueRHHvqX9epygVBhaYwiS+VtUhNPmBB0CwTkAUMTIQ1
+u2iv0c/beutBHshexO51AzGsH/LHy5LyJcgZYQ3YYRc/KABJb6A02I/V7H1Aa8Uz
+qKrx4ZKW1h7t8q3gCBvPRe6CVft/yHISE9UL7sflQnelBVdLO5Miy9MEZDRJUVCY
+TwIDAQAB
+-----END PUBLIC KEY-----';
+
+    const sandboxMoneymourPublicKey = '-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0A0WavOzsKJn0SHdQrF1
+ThSdWly629clB6y4crZ0D778rQGmBFSkvdceIt3fERGYuCyWHFtiOS6pIlfIcJgR
+hDoA0N6UKlT777KH8s/B3+cMnEHhPBiD0Lq8w8yjWdal1BvFkuUOionNm9q9OA2g
+uD4BWv9WZBm1/mB7kNczvEGxvN1E601lJztU8WahWH1w0fEmRsW9BpcVrqlqfkuw
+hPUnjeVXWDTX05gVyAr/Do6yNcJi6M5/4hU6EcQiQ+d1pHgd/mCLN/hoiPvGG5y9
+UrR2av3bgfefF5QU7ZRzjMV3X7bGXPG2pH+L8kbHCPB78j5rzxHViSKIpPKkMg+P
+FwIDAQAB
+-----END PUBLIC KEY-----';
+
     /**
      * @var string The merchant RSA private key
      */
@@ -58,7 +88,7 @@ class SignatureFactory {
         ApiClient::validateEnvironment($environment);
 
         if (!$this->publicKey) {
-            $this->publicKey = file_get_contents('./keys/moneymour-' . $environment . '-merchant-callback-public.pem');
+            $this->publicKey = ${$environment . 'MoneymourPublicKey'};
         }
 
         $verification = openssl_verify(
