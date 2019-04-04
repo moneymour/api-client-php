@@ -88,7 +88,7 @@ FwIDAQAB
         ApiClient::validateEnvironment($environment);
 
         if (!$this->publicKey) {
-            $this->publicKey = ${$environment . 'MoneymourPublicKey'};
+            $this->publicKey = constant('self::' . $environment . 'MoneymourPublicKey');
         }
 
         $verification = openssl_verify(
